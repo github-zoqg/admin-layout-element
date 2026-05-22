@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Layout from '@/components/layout/index.vue';
+import emitter from '@/utils/mitt';
 
 export let routes = [
   {
@@ -27,6 +28,17 @@ export let routes = [
         meta: {
           title: '数据源管理',
           icon: 'Location',
+        },
+        component: () => import('@/views/data-source-manage/index.vue'),
+      },
+      {
+        path: 'data-source-manage2',
+        name: 'data-source-manage2',
+        meta: {
+          title: '数据源管理',
+          icon: 'Location',
+          isHide: true,
+          isActive: 'data-source-manage',
         },
         component: () => import('@/views/data-source-manage/index.vue'),
       },
@@ -94,4 +106,7 @@ const router = createRouter({
 });
 // router.addRoute();
 // console.log(router, 'router');
+emitter.on('logout', () => {
+  router.push('/login');
+});
 export default router;

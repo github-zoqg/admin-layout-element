@@ -1,7 +1,140 @@
 <template>
-  <div></div>
+  <ListLayout>
+    <div class="list_title">查看接口数据</div>
+    <ListForm :model="formInline">
+      <el-form-item label="接口表名">
+        <el-input
+          v-model="formInline.user"
+          placeholder="请输入接口表名"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="时间">
+        <el-date-picker
+          v-model="formInline.date"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          type="datetimerange"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+        />
+      </el-form-item>
+      <el-form-item label="批次">
+        <el-input
+          v-model="formInline.user"
+          placeholder="请输入批次"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="状态">
+        <el-select
+          v-model="formInline.region"
+          placeholder="请选择状态"
+          clearable
+        >
+          <el-option label="Zone one" value="shanghai" />
+          <el-option label="Zone two" value="beijing" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button class="from-btn" type="primary" @click="getList">
+          查询
+        </el-button>
+      </el-form-item>
+    </ListForm>
+    <Table
+      :data="tableData"
+      :total="100"
+      @selection-change="handleSelectionChange"
+      @pageDataChange="pageDataChange"
+    >
+      <el-table-column type="selection" :selectable="selectable" width="55" />
+      <el-table-column prop="name" label="业务对象" width="120" />
+      <el-table-column prop="state" label="数据库连接" width="120" />
+      <el-table-column prop="city" label="接口表名" width="320" />
+      <el-table-column prop="address" label="SQL脚本" width="120">
+        <template #default="scope">
+          <el-button type="text" @click="handleEdit(scope.row)">
+            编辑
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column prop="address" label="上次同步时间" width="600" />
+      <el-table-column prop="address" label="当前数据量" width="600" />
+      <el-table-column prop="address" label="启用">
+        <template #default="scope">
+          <el-switch
+            v-model="scope.row.enabled"
+            active-value="1"
+            inactive-value="0"
+          />
+        </template>
+      </el-table-column>
+    </Table>
+  </ListLayout>
 </template>
 
-<script setup></script>
+<script setup>
+import ListForm from '@/components/list-form/index.vue';
+import Table from '@/components/table/index.vue';
+import ListLayout from '@/components/list-layout/index.vue';
+import { reactive, ref } from 'vue';
 
-<style lang="scss" scoped></style>
+// 表格数据
+const tableData = new Array(100).fill(null).map(() => ({
+  date: '2016-05-02',
+  name: '王小虎',
+  state: '上海市普陀区',
+  city: '金沙江路',
+  address: '上海市普陀区金沙江路1518 弄',
+  zip: '100000',
+}));
+
+// 查询表单
+const formInline = reactive({
+  user: '',
+  region: '',
+  date: '',
+});
+
+// 查询
+const getList = (pageData) => {
+  console.log('submit!', formInline, pageData);
+};
+
+// 分页
+const pageDataChange = (pageData) => {
+  console.log(pageData);
+  getList(pageData);
+};
+
+// 编辑
+let currentRow = null;
+const handleEdit = (row) => {
+  console.log(row);
+  currentRow = row;
+  dialogVisible.value = true;
+};
+
+// 对话框是否可见
+const dialogVisible = ref(false);
+
+// 确认
+const handleSure = () => {
+  console.log('确认');
+  handleCancel();
+};
+
+// 取消
+const handleCancel = () => {
+  console.log('取消');
+  dialogVisible.value = false;
+};
+
+// 选择
+const selectable = (row) => ![1, 2].includes(row.id);
+const multipleSelection = ref([]);
+const handleSelectionChange = (val) => {
+  console.log(val);
+  multipleSelection.value = val;
+};
+</script>

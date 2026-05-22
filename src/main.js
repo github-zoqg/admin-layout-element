@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, defineAsyncComponent } from 'vue';
 import App from './App.vue';
 import router from './router/index.js';
 import ElementPlus from 'element-plus';
@@ -22,5 +22,9 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
 app.use(pinia);
+const RemoteComp = defineAsyncComponent(() => import('remote_app/HelloWorld'));
+console.log('RemoteComp', RemoteComp);
+app.component('RemoteComp', RemoteComp);
+
 app.mount('#app');
 console.log('app', pinia);

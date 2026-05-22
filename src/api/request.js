@@ -1,4 +1,6 @@
 import axios from 'axios';
+import emitter from '@/utils/mitt';
+
 // 创建axios实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -13,6 +15,11 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use(
   (response) => {
     // 对响应数据做点什么
+    if (response.data.code === 401) {
+      emitter.emit('logout');
+      return Promise.reject(response.data);
+    }
+    // 401 未登录，跳转到登录页
     return response.data;
   },
   (error) => {

@@ -10,7 +10,10 @@
       </el-sub-menu>
     </template>
     <template v-else>
-      <el-menu-item :index="item.path">
+      <el-menu-item
+        :index="item.path"
+        :class="{ 'is-active': item.name === $route.meta.isActive }"
+      >
         {{ item.meta.title }}
       </el-menu-item>
     </template>

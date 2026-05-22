@@ -57,9 +57,6 @@ button:hover {
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
-.el-menu {
-  min-height: 100%;
-}
 
 .card {
   padding: 2em;
@@ -91,6 +88,25 @@ button:focus-visible {
 .el-date-editor {
   width: 100% !important;
 }
+.el-drawer__header {
+  margin: 0;
+  background: aliceblue;
+  padding-block: 0.5em;
+  font-weight: bold;
+}
+.el-dialog {
+  padding: 0;
+}
+.el-dialog__header {
+  background: aliceblue;
+  font-weight: bold;
+}
+.el-dialog__header,
+.el-dialog__footer,
+.el-dialog__body {
+  padding: 1em;
+}
+
 .from-btn {
   margin-left: auto;
 }

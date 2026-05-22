@@ -1,6 +1,6 @@
 <template>
   <ListLayout>
-    <div class="list_title">接口服务信息</div>
+    <div class="list_title">接口表信息</div>
     <ListForm :model="formInline">
       <el-form-item label="接口表名">
         <el-input
@@ -54,6 +54,23 @@
       </el-table-column>
     </Table>
   </ListLayout>
+  <Dialog
+    ref="dialogRef"
+    v-model="dialogVisible"
+    :width="minDialog"
+    title="SQL脚本文本"
+    @sure="handleSure"
+    @cancel="handleCancel"
+  >
+    <template #default>
+      <el-input
+        v-model="currentRow.address"
+        type="textarea"
+        placeholder="请输入SQL脚本"
+        :rows="6"
+      />
+    </template>
+  </Dialog>
 </template>
 
 <script setup>
@@ -62,6 +79,8 @@ import Table from '@/components/table/index.vue';
 import ListLayout from '@/components/list-layout/index.vue';
 import { reactive, ref } from 'vue';
 import { shortcuts } from '@/utils/date';
+import Dialog from '@/components/dialog/index.vue';
+import { minDialog } from '@/config/const';
 
 // 表格数据
 const tableData = new Array(100).fill(null).map(() => ({
@@ -92,8 +111,26 @@ const pageDataChange = (pageData) => {
 };
 
 // 编辑
+let currentRow = null;
 const handleEdit = (row) => {
   console.log(row);
+  currentRow = row;
+  dialogVisible.value = true;
+};
+
+// 对话框是否可见
+const dialogVisible = ref(false);
+
+// 确认
+const handleSure = () => {
+  console.log('确认');
+  handleCancel();
+};
+
+// 取消
+const handleCancel = () => {
+  console.log('取消');
+  dialogVisible.value = false;
 };
 
 // 选择

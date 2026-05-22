@@ -1,3 +1,4 @@
 {
-  "recommendations": ["Vue.volar"]
+  // 启用 ESLint 自动修复
+  "recommendations": ["ESLint.eslint", "Vue.volar"]
 }

@@ -6,6 +6,8 @@ import importToCDN from 'vite-plugin-cdn-import';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import vitCompression from 'vite-plugin-compression';
+import federation from '@originjs/vite-plugin-federation';
+import inspect from 'vite-plugin-inspect';
 
 const cdnUrl = {
   css: { eleCss: '//cdn.jsdelivr.net/npm/element-plus/dist/index.css' },
@@ -38,6 +40,16 @@ export default defineConfig(({ mode }) => {
   return {
     // 插件配置
     plugins: [
+      inspect(),
+      // 配置联邦插件
+      // 用于在主机应用中加载远程应用的代码
+      federation({
+        name: 'host-app',
+        remotes: {
+          remote_app: 'http://localhost:5173/assets/remoteEntry.js',
+        },
+        shared: ['vue', 'vue-router', 'pinia'],
+      }),
       vue(), // Vue 3 支持
       legacy({
         // 兼容旧浏览器
@@ -91,12 +103,12 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0', // 允许外部访问
       port: 3000, // 端口
-      open: true, // 启动后自动打开浏览器
+      // open: true, // 启动后自动打开浏览器
       https: false, // 是否启用 https
       proxy: {
         // 代理 API 请求到后端
         '/api': {
-          target: 'http://localhost:8080',
+          target: 'http://192.168.110.55:9052',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
