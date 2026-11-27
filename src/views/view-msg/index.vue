@@ -1,46 +1,7 @@
 <template>
   <ListLayout>
     <div class="list_title">查看接口报文</div>
-    <ListForm :model="formInline">
-      <el-form-item label="接口名">
-        <el-input
-          v-model="formInline.user"
-          placeholder="请输入接口名"
-          clearable
-        />
-      </el-form-item>
-      <el-form-item label="时间">
-        <el-date-picker
-          v-model="formInline.date"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          type="datetimerange"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-        />
-      </el-form-item>
-      <el-form-item label="报文ID">
-        <el-input
-          v-model="formInline.user"
-          placeholder="请输入报文ID"
-          clearable
-        />
-      </el-form-item>
-      <el-form-item label="状态">
-        <el-select
-          v-model="formInline.region"
-          placeholder="请选择状态"
-          clearable
-        >
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="from-btn" type="primary" @click="getList">
-          查询
-        </el-button>
-      </el-form-item>
-    </ListForm>
+    <ListForm v-model:value="formInline" :fields="fields"> </ListForm>
     <Table
       :data="tableData"
       :total="100"
@@ -85,6 +46,77 @@ import { reactive, ref } from 'vue';
 import Dialog from '@/components/dialog/index.vue';
 import { minDialog } from '@/config/const';
 import JsonViewer from '@/components/json-viewer/index.vue';
+
+const fields = ref([
+  {
+    name: 'user',
+    label: 'SERVICE_NAME',
+    type: 'input',
+    rules: [{ required: true, message: '请输入SERVICE_NAME', trigger: 'blur' }],
+    placeholder: '请输入SERVICE_NAME',
+    handleChange: (val) => {
+      console.log(val);
+      if (val) {
+        fields.value[1].attrs.disabled = false;
+      } else {
+        fields.value[1].attrs.disabled = true;
+      }
+    },
+  },
+  {
+    name: 'region',
+    label: 'INSTANCE_ID',
+    type: 'input',
+    attrs: {
+      disabled: true,
+      placeholder: '请输入INSTANCE_ID',
+    },
+  },
+  {
+    name: 'date',
+    label: '请求时间',
+    hide: true,
+    type: 'daterange',
+    attrs: {
+      ['start-placeholder']: '开始时间',
+      ['end-placeholder']: '结束时间',
+    },
+  },
+  {
+    name: 'status',
+    label: '状态',
+    type: 'select',
+    attrs: {
+      placeholder: '请选择状态',
+    },
+    handleChange: (val) => {
+      console.log(val);
+      if (val === 'success') {
+        fields.value[2].hide = false;
+      } else {
+        fields.value[2].hide = true;
+      }
+    },
+    options: [
+      {
+        value: 'success',
+        label: '成功',
+      },
+      {
+        value: 'error',
+        label: '失败',
+      },
+    ],
+  },
+  {
+    name: 'responseDate',
+    label: '响应时间',
+    type: 'date',
+    attrs: {
+      placeholder: '请选择响应时间',
+    },
+  },
+]);
 
 // 表格数据
 const tableData = new Array(100).fill(null).map(() => ({

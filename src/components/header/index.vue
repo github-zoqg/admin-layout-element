@@ -8,7 +8,7 @@
           <span>用户</span>
         </span>
         <template #dropdown>
-          <el-dropdown-menu>
+          <el-dropdown-menu class="header_dropdown_menu">
             <el-dropdown-item
               :icon="CirclePlusFilled"
               @click="dialogVisible = true"
@@ -55,7 +55,7 @@ const clickLogout = () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header_container {
   height: 100%;
   padding-inline: 0 4em;
@@ -72,7 +72,7 @@ const clickLogout = () => {
     display: flex;
   }
 }
-.el-popper {
+.header_dropdown_menu {
   width: 160px;
 }
 </style>
